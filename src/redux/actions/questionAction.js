@@ -12,22 +12,22 @@ import {shuffleArray} from '../../utils/helperFunctions';
 export const fetchAllCategories = () => {
   return (dispatch) => {
     getAllCategories()
-      .then((categories) => {
-        categories = categories.map((category) => {
+      .then(({trivia_categories}) => {
+        trivia_categories = trivia_categories.map((category) => {
           return {
-            name: category.name,
-            id: category.id,
+            label: category.name,
+            value: category.id,
           };
         });
-        dispatch({type: FETCH_CATEGORIES_SUCCESS, payload: categories});
+        dispatch({type: FETCH_CATEGORIES_SUCCESS, payload: trivia_categories});
       })
-      .catch(() => {
-        dispatch({type: FETCH_ERROR});
+      .catch((error) => {
+        dispatch({type: FETCH_ERROR, payload: error});
       });
   };
 };
 
-export const fetchQuestions = (selectedCategoryId, selectedDifficulty) => {
+export const fetchQuestions = (selectedDifficulty, selectedCategoryId) => {
   return (dispatch) => {
     getData(10, selectedDifficulty, selectedCategoryId)
       .then((questions) => {
@@ -63,9 +63,9 @@ export const nextQuestion = (
     const nextIndex = currentQuestionIndex + 1;
     let totalQuestionsSize = questions.length;
 
-    selectedAnswer === questions[currentQuestionIndex].correct_answer
-      ? (totalScore += 1)
-      : totalScore;
+    if (selectedAnswer === questions[currentQuestionIndex].correct_answer) {
+      totalScore += 100;
+    }
 
     if (nextIndex < totalQuestionsSize) {
       dispatch({
