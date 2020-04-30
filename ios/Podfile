@@ -77,6 +77,8 @@ target 'triviaApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'RNCPicker', :path => '../node_modules/@react-native-community/picker'
+
   target 'triviaAppTests' do
     inherit! :complete
     # Pods for testing
