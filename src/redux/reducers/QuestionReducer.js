@@ -15,7 +15,7 @@ const INITIAL_STATE = {
       question: 'How would one say goodbye in Spanish?',
       correct_answer: 'Adi&oacute;s',
       incorrect_answers: [' Hola', 'Au Revoir', 'Salir'],
-      choices: [],
+      choices: ['Adi&oacute;s', 'Hola', 'Au Revoir', 'Salir'],
     },
     {
       category: 'General Knowledge',
@@ -25,7 +25,7 @@ const INITIAL_STATE = {
         'What does the &#039;S&#039; stand for in the abbreviation SIM, as in SIM card? ',
       correct_answer: 'Subscriber',
       incorrect_answers: ['Single', 'Secure', 'Solid'],
-      choices: [],
+      choices: ['Subscriber', 'Single', 'Secure', 'Solid'],
     },
   ],
   currentQuestionIndex: 0,
@@ -34,6 +34,7 @@ const INITIAL_STATE = {
   loading: true,
   categories: [],
   error: false,
+  errorMessage: '',
   selectedDifficulty: 'Easy',
   selectedCategoryId: 0,
   amountQuestions: 10,
@@ -55,6 +56,7 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: true,
+        errorMessage: action.payload,
       };
     case FETCH_CATEGORIES_SUCCESS:
       return {
