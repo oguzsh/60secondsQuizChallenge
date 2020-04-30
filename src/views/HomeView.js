@@ -1,18 +1,35 @@
-import React from 'react';
-import {SafeAreaView, View} from 'react-native';
+import React, {useState, useLayoutEffect} from 'react';
+import {SafeAreaView} from 'react-native';
+
+import {connect} from 'react-redux';
+
+import * as actions from '../redux/actions';
 
 import Column from '../components/base/Column';
 import Text from '../components/base/Text';
-import ActionButton, {ActionButtonTitle} from '../components/ActionButton';
 import WelcomeLogo from '../components/WelcomeLogo';
 import Background from '../components/Background';
+import ActionButton, {ActionButtonTitle} from '../components/ActionButton';
+import ModalView from '../components/ModalView';
 
 import theme from '../utils/theme';
 
-const HomeView = ({navigation}) => {
+const HomeView = ({
+  categories,
+  fetchAllCategories,
+  fetchQuestions,
+  loading,
+  navigation,
+}) => {
+  const [visible, setVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    fetchAllCategories();
+  }, [fetchAllCategories]);
+
   return (
     <Column as={SafeAreaView} flex={1} bg="white">
-      <Column flex={1} mt={40}>
+      <Column flex={1} mt={20}>
         <WelcomeLogo />
       </Column>
 
@@ -24,18 +41,28 @@ const HomeView = ({navigation}) => {
           TRIVIA GAME
         </Text>
 
-        <ActionButton
-          mt={40}
-          borderRadius={30}
-          onPress={() => navigation.navigate('Question')}
-          bg="white">
+        <ActionButton mt={20} onPress={() => setVisible(!visible)} bg="white">
           <ActionButtonTitle color="purple">GET STARTED</ActionButtonTitle>
         </ActionButton>
       </Column>
 
+      <ModalView
+        visible={visible}
+        loading={loading}
+        setVisible={setVisible}
+        categories={categories}
+      />
       <Background />
     </Column>
   );
 };
 
-export default HomeView;
+const mapStateToProps = ({questionsReducer}) => {
+  const {categories, loading} = questionsReducer;
+  return {
+    categories,
+    loading,
+  };
+};
+
+export default connect(mapStateToProps, actions)(HomeView);
