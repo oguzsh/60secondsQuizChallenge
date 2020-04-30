@@ -9,10 +9,15 @@ import thunk from 'redux-thunk';
 
 import {name as appName} from './app.json';
 
-export default function Main() {
-  const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const store = createStore(reducers, storeEnhancers(applyMiddleware(thunk)));
+const middleware = [thunk];
+
+export default function Main() {
+  const store = createStore(
+    reducers,
+    composeEnhancers(applyMiddleware(...middleware)),
+  );
 
   return (
     <Provider store={store}>
