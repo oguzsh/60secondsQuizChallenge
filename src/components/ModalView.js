@@ -2,6 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import {Dimensions, View} from 'react-native';
 
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
+
 import {CustomPicker} from 'react-native-custom-picker';
 import Modal from 'react-native-modal';
 
@@ -10,22 +13,27 @@ import ActionButton, {ActionButtonTitle} from './ActionButton';
 import Column from './base/Column';
 import Row from './base/Row';
 
-import theme from '../utils/theme';
-
-// TODO : Reduxu bağla, dispacth ile verileri state'e kaydet
-
-const ModalView = ({visible, loading, setVisible, categories}) => {
+const ModalView = ({
+  visible,
+  loading,
+  setVisible,
+  categories,
+  questions,
+  startGame,
+  selectedCategoryId,
+  navigation,
+}) => {
   const [difficulty, setDifficulty] = useState('easy');
   const [category, setCategory] = useState([]);
 
   // Only categories labels
-  const editedCategory = categories.map((category) => category.label);
+  const editedCategory = categories.map((c) => c.label);
 
   // Get selected category id
   const getCategoryId = (selectedCategory) =>
-    categories.find((cat) => cat.label === selectedCategory);
+    categories.find((c) => c.label === selectedCategory);
 
-  const selectedCategoryId = getCategoryId(category);
+  const selectedCategoryIdState = getCategoryId(category);
 
   // Custom Picker Settings
 
@@ -123,7 +131,11 @@ const ModalView = ({visible, loading, setVisible, categories}) => {
           <ActionButton
             borderRadius={30}
             mt={20}
-            onPress={() => setVisible(!visible)}
+            onPress={() => {
+              startGame(difficulty, selectedCategoryIdState);
+              setVisible(!visible);
+              setTimeout(() => navigation.navigate('Questions'), 500);
+            }}
             bg="purple">
             <ActionButtonTitle color="white">START QUIZ</ActionButtonTitle>
           </ActionButton>
@@ -133,4 +145,11 @@ const ModalView = ({visible, loading, setVisible, categories}) => {
   );
 };
 
-export default ModalView;
+const mapStateToProps = ({questionsReducer}) => {
+  const {loading} = questionsReducer;
+  return {
+    loading,
+  };
+};
+
+export default connect(mapStateToProps, actions)(ModalView);
