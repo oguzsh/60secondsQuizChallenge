@@ -2,7 +2,6 @@ import React, {useState, useLayoutEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 
 import {connect} from 'react-redux';
-
 import * as actions from '../redux/actions';
 
 import Column from '../components/base/Column';
@@ -14,13 +13,7 @@ import ModalView from '../components/ModalView';
 
 import theme from '../utils/theme';
 
-const HomeView = ({
-  categories,
-  fetchAllCategories,
-  fetchQuestions,
-  loading,
-  navigation,
-}) => {
+const HomeView = ({categories, fetchAllCategories, loading, navigation}) => {
   const [visible, setVisible] = useState(false);
 
   useLayoutEffect(() => {
@@ -38,7 +31,7 @@ const HomeView = ({
           WELCOME
         </Text>
         <Text fontFamily={theme.fontFamily.medium} color="white" fontSize={18}>
-          TRIVIA GAME
+          60 SECONDS QUIZ CHALLENGE
         </Text>
 
         <ActionButton mt={20} onPress={() => setVisible(!visible)} bg="white">
@@ -51,6 +44,7 @@ const HomeView = ({
         loading={loading}
         setVisible={setVisible}
         categories={categories}
+        navigation={navigation}
       />
       <Background />
     </Column>
