@@ -9,7 +9,7 @@ const CorrectLogo = () => {
       autoPlay
       loop
       style={{
-        width: 220,
+        width: 300,
       }}
     />
   );

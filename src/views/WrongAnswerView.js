@@ -2,8 +2,6 @@ import React from 'react';
 import {SafeAreaView} from 'react-native';
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {fetchQuestions} from '../redux/actions';
 
 import Column from '../components/base/Column';
 import Row from '../components/base/Row';
@@ -14,14 +12,14 @@ import WrongLogo from '../components/WrongLogo';
 import theme from '../utils/theme';
 import Score from '../components/Score';
 
-const WrongAnswerView = ({navigation}) => {
+const WrongAnswerView = ({navigation, totalScore}) => {
   return (
     <Column as={SafeAreaView} flex={1} bg="white">
-      <Column mt={40}>
+      <Column style={{position: 'absolute', top: 40}}>
         <WrongLogo />
       </Column>
 
-      <Column flex={1}>
+      <Column style={{position: 'absolute', bottom: 120}}>
         <Text fontFamily={theme.fontFamily.bold} color="black" fontSize={28}>
           Game Over!
         </Text>
@@ -38,27 +36,27 @@ const WrongAnswerView = ({navigation}) => {
             fontSize={18}>
             You Score:
           </Text>
-          <Score score={800} />
+          <Score score={totalScore} />
         </Row>
 
         <ActionButton
           mt={30}
           borderRadius={30}
-          onPress={() => console.log('hi')}
+          onPress={() => navigation.navigate('Home')}
           bg="green">
           <ActionButtonTitle color="white">PLAY AGAIN</ActionButtonTitle>
-        </ActionButton>
-
-        <ActionButton
-          mt={20}
-          borderRadius={30}
-          onPress={() => console.log('hi')}
-          bg="black">
-          <ActionButtonTitle color="white">RETURN HOME</ActionButtonTitle>
         </ActionButton>
       </Column>
     </Column>
   );
 };
 
-export default WrongAnswerView;
+const mapStateToProps = ({questionsReducer}) => {
+  const {totalScore} = questionsReducer;
+
+  return {
+    totalScore,
+  };
+};
+
+export default connect(mapStateToProps, null)(WrongAnswerView);
