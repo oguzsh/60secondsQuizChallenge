@@ -3,6 +3,7 @@ import {
   FETCH_ERROR,
   FETCH_SUCCESS,
   GAME_OVER,
+  START_GAME,
   NEXT_QUESTION,
 } from '../actions/types';
 
@@ -30,15 +31,16 @@ const INITIAL_STATE = {
   ],
   currentQuestionIndex: 0,
   totalScore: 0,
-  time: 15,
+  time: 60,
   loading: true,
   categories: [],
   error: false,
   errorMessage: '',
-  selectedDifficulty: 'Easy',
+  selectedDifficulty: 'easy',
   selectedCategoryId: 0,
-  amountQuestions: 10,
+  amountQuestions: 50,
   totalQuestionsSize: 0,
+  gameOver: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -70,11 +72,26 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         currentQuestionIndex: action.payload.currentQuestionIndex,
         totalScore: action.payload.totalScore,
+        time: action.payload.time,
+      };
+    case START_GAME:
+      return {
+        ...state,
+        selectedCategoryId: action.payload.categoryId
+          ? action.payload.categoryId
+          : state.selectedCategoryId,
+        selectedDifficulty: action.payload.difficulty
+          ? action.payload.difficulty
+          : state.selectedDifficulty,
+        currentQuestionIndex: 0,
+        totalScore: 0,
+        loading: true,
       };
     case GAME_OVER:
       return {
         ...state,
         totalScore: action.payload,
+        gameOver: true,
       };
     default:
       return state;
