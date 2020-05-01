@@ -6,9 +6,10 @@ const WrongLogo = () => {
   return (
     <LottieView
       source={require('../assets/animatedIcons/wrongAnswer.json')}
-      autoPlay
+      autoPlay={true}
+      autoSize={true}
       style={{
-        width: 220,
+        width: 400,
       }}
     />
   );
